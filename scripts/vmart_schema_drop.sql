@@ -1,0 +1,18 @@
+drop table online_sales.online_sales_fact cascade;
+drop table online_sales.call_center_dimension cascade;
+drop table online_sales.online_page_dimension cascade;
+drop table store.store_orders_fact cascade;
+drop table store.store_sales_fact cascade;
+drop table store.store_dimension cascade;
+drop table public.inventory_fact cascade;
+drop table public.customer_dimension cascade;
+drop table public.warehouse_dimension cascade;
+drop table public.shipping_dimension cascade;
+drop table public.employee_dimension cascade;
+drop table public.date_dimension cascade;
+drop table public.product_dimension cascade;
+drop table public.promotion_dimension cascade;
+drop table public.vendor_dimension cascade;
+drop schema store;
+drop schema online_sales;
+drop schema public;
