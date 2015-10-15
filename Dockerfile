@@ -5,3 +5,4 @@ MAINTAINER bigboards
 
 USER root
 
+VOLUME /scripts /data
