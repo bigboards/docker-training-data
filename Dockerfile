@@ -5,20 +5,16 @@ MAINTAINER bigboards
 
 USER root
 
-# if you want data to be persisted
+# uncomment next line, if you want data to be persisted
 #VOLUME ["/var/lib/mysql"]
 
-ENV SCRIPTS_F scripts.tar.gz
 ENV DATA_F data.tar.gz
-
-ENV SCRIPTS https://s3.amazonaws.com/data.bigboards.io/bb-docker-training-src-data/${SCRIPTS_F}
 ENV DATA https://s3.amazonaws.com/data.bigboards.io/bb-docker-training-src-data/${DATA_F}
-
 ENV WORKDIR /opt/training-src-data
 
-RUN mkdir ${WORKDIR}
-ADD ${SCRIPTS} ${DATA} start_db.sh ${WORKDIR}/
-RUN tar -zxvf ${WORKDIR}/${SCRIPTS_F} -C ${WORKDIR} && \
-    tar -zxvf ${WORKDIR}/${DATA_F} -C ${WORKDIR}
+ADD ${DATA} ${WORKDIR}/
+RUN tar -zxvf ${WORKDIR}/${DATA_F} -C ${WORKDIR}
 
-CMD ["/opt/training-src-data/start_db.sh"]
+# Hook in to the docker/mysql initialization routine
+# cfr https://github.com/docker-library/mysql/blob/master/5.6/docker-entrypoint.sh
+ADD scripts/01_vmart_schema_define.sql scripts/02_vmart_data_load.sql /docker-entrypoint-initdb.d/
