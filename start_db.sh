@@ -7,9 +7,9 @@ set -x
 /usr/sbin/mysqld &
 mysql_pid=$!
 
-# Wait for MySQL deamon to start
+# Wait for MySQL daemon to start
 until mysqladmin ping &>/dev/null; do
-  echo -n "."; sleep 0.2
+  echo -n "."; sleep 1
 done
 
 if [[ ! -z "`mysql -qfsBe "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='online_sales'" 2>&1`" ]];
