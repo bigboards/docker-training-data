@@ -17,7 +17,7 @@ ENV DATA https://s3.amazonaws.com/data.bigboards.io/bb-docker-training-src-data/
 ENV WORKDIR /opt/training-src-data
 
 RUN mkdir ${WORKDIR}
-ADD ${SCRIPTS} ${DATA} ${WORKDIR}/
+ADD ${SCRIPTS} ${DATA} start_db.sh ${WORKDIR}/
 RUN tar -zxvf ${WORKDIR}/${SCRIPTS_F} -C ${WORKDIR} && \
     tar -zxvf ${WORKDIR}/${DATA_F} -C ${WORKDIR}
 
