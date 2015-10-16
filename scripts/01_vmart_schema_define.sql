@@ -148,11 +148,11 @@ create table public.inventory_fact
 
 alter table public.inventory_fact
         add constraint fk_inventory_date foreign key (date_key)
-            references date_dimension (date_key),
+            references public.date_dimension (date_key),
         add constraint fk_inventory_product foreign key (product_key,product_version) 
-            references product_dimension (product_key,product_version),
+            references public.product_dimension (product_key,product_version),
         add constraint fk_inventory_warehouse foreign key (warehouse_key) 
-            references warehouse_dimension (warehouse_key);
+            references public.warehouse_dimension (warehouse_key);
 
 
 
