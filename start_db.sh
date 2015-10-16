@@ -4,8 +4,7 @@ set -e
 set -x
 
 # Start the MySQL daemon in the background.
-/usr/sbin/mysqld &
-mysql_pid=$!
+/entrypoint.sh
 
 # Wait for MySQL daemon to start
 until mysqladmin ping &>/dev/null; do

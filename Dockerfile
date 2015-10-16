@@ -21,4 +21,5 @@ ADD ${SCRIPTS} ${DATA} start_db.sh ${WORKDIR}/
 RUN tar -zxvf ${WORKDIR}/${SCRIPTS_F} -C ${WORKDIR} && \
     tar -zxvf ${WORKDIR}/${DATA_F} -C ${WORKDIR}
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/opt/training-src-data/start_db.sh"]
