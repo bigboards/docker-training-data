@@ -1,6 +1,8 @@
 create schema store;
 create schema online_sales;
 create schema public;
+create schema retail;
+create schema weather;
 
 create table public.customer_dimension
 (	customer_key            integer         not null primary key,
@@ -9,7 +11,7 @@ create table public.customer_dimension
 	customer_gender         varchar(8),
 	title                   varchar(8),
 	household_id            integer,
-        customer_address        varchar(256),
+  customer_address        varchar(256),
 	customer_city           varchar(64),
 	customer_state          char(2),
 	customer_region         varchar(64),
@@ -28,7 +30,7 @@ create table public.customer_dimension
 
 create table public.product_dimension
 (	product_key             integer         not null,
-        product_version         integer         not null,
+  product_version         integer         not null,
 	product_description     varchar(128),
 	sku_number              char(32),
 	category_description    char(32),
@@ -135,7 +137,7 @@ create table public.warehouse_dimension
 	warehouse_address       varchar(256),
 	warehouse_city          varchar(60),
 	warehouse_state         char(2),
-        warehouse_region        varchar(32)
+  warehouse_region        varchar(32)
 );
 
 create table public.inventory_fact
@@ -162,7 +164,7 @@ alter table public.inventory_fact
 
 
 create table store.store_dimension
-(	store_key               integer         not null primary key,
+( store_key               integer         not null primary key,
 	store_name              varchar(64),
 	store_number            integer,
 	store_address           varchar(256),
@@ -281,44 +283,270 @@ create table online_sales.call_center_dimension
 );
 
 create table online_sales.online_sales_fact
-(	sale_date_key           integer         not null,
-	ship_date_key           integer         not null,
-	product_key             integer         not null,
-	product_version         integer         not null,
-	customer_key            integer         not null,
-	call_center_key         integer         not null,
-	online_page_key         integer         not null,
-	shipping_key            integer         not null,
-	warehouse_key           integer         not null,
-	promotion_key           integer         not null,
-	pos_transaction_number  integer         not null,
-	sales_quantity          integer,
-	sales_dollar_amount     float,
-	ship_dollar_amount      float,
-	net_dollar_amount       float,
-	cost_dollar_amount      float,
+(	sale_date_key              integer         not null,
+	ship_date_key              integer         not null,
+	product_key                integer         not null,
+	product_version            integer         not null,
+	customer_key               integer         not null,
+	call_center_key            integer         not null,
+	online_page_key            integer         not null,
+	shipping_key               integer         not null,
+	warehouse_key              integer         not null,
+	promotion_key              integer         not null,
+	pos_transaction_number     integer         not null,
+	sales_quantity             integer,
+	sales_dollar_amount        float,
+	ship_dollar_amount         float,
+	net_dollar_amount          float,
+	cost_dollar_amount         float,
 	gross_profit_dollar_amount float,
-	transaction_type        varchar(16)
+	transaction_type           varchar(16)
 );
 
 alter table online_sales.online_sales_fact
-	add constraint fk_online_sales_saledate foreign key (sale_date_key) 
-	    references public.date_dimension (date_key),
-        add constraint fk_online_sales_shipdate foreign key (ship_date_key) 
+        add constraint fk_online_sales_saledate foreign key (sale_date_key)
             references public.date_dimension (date_key),
-        add constraint fk_online_sales_product foreign key (product_key,product_version) 
+        add constraint fk_online_sales_shipdate foreign key (ship_date_key)
+            references public.date_dimension (date_key),
+        add constraint fk_online_sales_product foreign key (product_key,product_version)
             references public.product_dimension (product_key,product_version),
-        add constraint fk_online_sales_customer foreign key (customer_key) 
+        add constraint fk_online_sales_customer foreign key (customer_key)
             references public.customer_dimension (customer_key),
-        add constraint fk_online_sales_cc foreign key (call_center_key) 
+        add constraint fk_online_sales_cc foreign key (call_center_key)
             references online_sales.call_center_dimension (call_center_key),
-        add constraint fk_online_sales_op foreign key (online_page_key) 
+        add constraint fk_online_sales_op foreign key (online_page_key)
             references online_sales.online_page_dimension (online_page_key),
-        add constraint fk_online_sales_shipping foreign key (shipping_key) 
+        add constraint fk_online_sales_shipping foreign key (shipping_key)
             references public.shipping_dimension (shipping_key),
-        add constraint fk_online_sales_warehouse foreign key (warehouse_key) 
+        add constraint fk_online_sales_warehouse foreign key (warehouse_key)
             references public.warehouse_dimension (warehouse_key),
-        add constraint fk_online_sales_promotion foreign key (promotion_key) 
+        add constraint fk_online_sales_promotion foreign key (promotion_key)
             references public.promotion_dimension (promotion_key);
 
 
+
+
+
+create table retail.stores
+( store_key                  integer         not null primary key,
+	store_name                 varchar(64),
+	store_number               integer,
+	store_address              varchar(256),
+	store_city                 varchar(64),
+	store_state                char(2),
+	store_region               varchar(64),
+	floor_plan_type            varchar(32),
+	photo_processing_type      varchar(32),
+	financial_service_type     varchar(32),
+	selling_square_footage     integer,
+	total_square_footage       integer,
+	first_open_date            date,
+	last_remodel_date          date,
+	number_of_employees        integer,
+	annual_shrinkage           integer,
+	foot_traffic               integer,
+	monthly_rent_cost          integer
+);
+
+create table retail.customers
+( customer_key               integer         not null primary key,
+	customer_type              varchar(16),
+	customer_name              varchar(256),
+	customer_gender            varchar(8),
+	title                      varchar(8),
+	household_id               integer,
+  customer_address           varchar(256),
+	customer_city              varchar(64),
+	customer_state             char(2),
+	customer_region            varchar(64),
+	marital_status             varchar(32),
+	customer_age               integer,
+	number_of_children         integer,
+	annual_income              integer,
+	occupation                 varchar(64),
+	largest_bill_amount        integer,
+	store_membership_card      integer,
+	customer_since             date,
+	deal_stage                 varchar(32),
+	deal_size                  integer,
+	last_deal_update           date
+);
+
+create table retail.employees
+( employee_key               integer         not null primary key,
+	employee_gender            varchar(8),
+	courtesy_title             varchar(8),
+	employee_first_name        varchar(64),
+	employee_middle_initial    varchar(8),
+	employee_last_name         varchar(64),
+	employee_age               integer,
+	hire_date                  date,
+	employee_street_address    varchar(256),
+	employee_city              varchar(64),
+	employee_state             char(2),
+	employee_region            char(32),
+	job_title                  varchar(64),
+	reports_to                 integer,
+	salaried_flag              integer,
+	annual_salary              integer,
+	hourly_rate                float,
+	vacation_days              integer
+);
+
+create table retail.products
+( product_key                integer         not null,
+  product_version            integer         not null,
+	product_description        varchar(128),
+	sku_number                 char(32),
+	category_description       char(32),
+	department_description     char(32),
+	package_type_description   char(32),
+	package_size               char(32),
+	fat_content                integer,
+	diet_type                  char(32),
+	weight                     integer,
+	weight_units_of_measure    char(32),
+	shelf_width                integer,
+	shelf_height               integer,
+	shelf_depth                integer,
+	product_price              integer,
+	product_cost               integer,
+	lowest_competitor_price    integer,
+	highest_competitor_price   integer,
+	average_competitor_price   integer,
+	discontinued_flag          integer,
+	primary key (product_key,product_version)
+);
+
+create table retail.sales
+( date                       date            not null,
+	product_key                integer         not null,
+	product_version            integer         not null,
+	store_key                  integer         not null,
+	promotion_key              integer         not null,
+	customer_key               integer         not null,
+	employee_key               integer         not null,
+	pos_transaction_number     integer         not null,
+	sales_quantity             integer,
+	sales_dollar_amount        integer,
+	cost_dollar_amount         integer,
+	gross_profit_dollar_amount integer,
+	transaction_type           varchar(16),
+	transaction_time           time,
+	tender_type                varchar(8)
+);
+
+alter table retail.sales
+        add constraint fk_retail_products foreign key (product_key, product_version)
+            references retail.products(product_key, product_version),
+        add constraint fk_retail_stores foreign key (store_key)
+            references retail.stores(store_key),
+        add constraint fk_retail_customers foreign key (customer_key)
+            references retail.customers(customer_key),
+        add constraint fk_retail_employees foreign key (employee_key)
+            references retail.employees(employee_key);
+
+
+
+
+
+
+
+create table weather.stations
+( station_id                 integer         not null primary key,
+  state                      char(2)         not null,
+  name                       varchar(30)     not null,
+  latitude                   float           not null,
+  longitude                  float           not null,
+  elevation                  float           not null
+);
+
+create table weather.states
+( state                      char(2)         not null primary key,
+  stcode                     integer         not null
+);
+
+create table weather.countries
+(
+  iso2                       char(3)         not null primary key,
+  iso3                       char(3)         not null,
+  name                       char(30)        not null
+);
+
+create table weather.facts
+( station_id                 integer         not null,
+  year                       integer         not null,
+  month                      integer         not null,
+  element                    varchar(4)      not null,
+  day1                       integer,
+  day_2                      integer,
+  day_3                      integer,
+  day_4                      integer,
+  day_5                      integer,
+  day_6                      integer,
+  day_7                      integer,
+  day_8                      integer,
+  day_9                      integer,
+  day_10                     integer,
+  day_11                     integer,
+  day_12                     integer,
+  day_13                     integer,
+  day_14                     integer,
+  day_15                     integer,
+  day_16                     integer,
+  day_17                     integer,
+  day_18                     integer,
+  day_19                     integer,
+  day_20                     integer,
+  day_21                     integer,
+  day_22                     integer,
+  day_23                     integer,
+  day_24                     integer,
+  day_25                     integer,
+  day_26                     integer,
+  day_27                     integer,
+  day_28                     integer,
+  day_29                     integer,
+  day_30                     integer,
+  day_31                     integer,
+  primary key (station_id, yea  r, month, element)
+);
+
+create table weather.facts_2006
+( station_id                 integer         not null,
+  year                       integer         not null,
+  month                      integer         not null,
+  element                    varchar(4)      not null,
+  day1                       integer,
+  day_2                      integer,
+  day_3                      integer,
+  day_4                      integer,
+  day_5                      integer,
+  day_6                      integer,
+  day_7                      integer,
+  day_8                      integer,
+  day_9                      integer,
+  day_10                     integer,
+  day_11                     integer,
+  day_12                     integer,
+  day_13                     integer,
+  day_14                     integer,
+  day_15                     integer,
+  day_16                     integer,
+  day_17                     integer,
+  day_18                     integer,
+  day_19                     integer,
+  day_20                     integer,
+  day_21                     integer,
+  day_22                     integer,
+  day_23                     integer,
+  day_24                     integer,
+  day_25                     integer,
+  day_26                     integer,
+  day_27                     integer,
+  day_28                     integer,
+  day_29                     integer,
+  day_30                     integer,
+  day_31                     integer,
+  primary key (station_id, year, month, element)
+);

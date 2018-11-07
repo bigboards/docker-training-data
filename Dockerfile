@@ -1,5 +1,5 @@
 # Pull base image.
-FROM mysql:latest
+FROM mysql:5.6
 
 MAINTAINER bigboards
 
