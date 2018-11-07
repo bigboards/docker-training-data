@@ -477,7 +477,7 @@ create table weather.facts
 ( station_id                 integer         not null,
   year                       integer         not null,
   month                      integer         not null,
-  element                    varchar(4)      not null,
+  element                    char(4)         not null,
   day1                       integer,
   day_2                      integer,
   day_3                      integer,
@@ -509,14 +509,14 @@ create table weather.facts
   day_29                     integer,
   day_30                     integer,
   day_31                     integer,
-  primary key (station_id, yea  r, month, element)
+  primary key (station_id, year, month, element)
 );
 
 create table weather.facts_2006
 ( station_id                 integer         not null,
   year                       integer         not null,
   month                      integer         not null,
-  element                    varchar(4)      not null,
+  element                    char(4)         not null,
   day1                       integer,
   day_2                      integer,
   day_3                      integer,
