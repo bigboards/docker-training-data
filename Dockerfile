@@ -5,6 +5,9 @@ MAINTAINER bigboards
 
 USER root
 
+RUN set -x \
+	&& apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/*
+
 # we use a volume for performance reasons
 VOLUME ["/var/lib/mysql"]
 

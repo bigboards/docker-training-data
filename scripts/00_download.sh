@@ -7,8 +7,8 @@ WEATHER_DATA=https://s3.amazonaws.com/data.bigboards.io/bb-docker-training-src-d
 
 WORKDIR=/opt/training-src-data
 
-curl ${DATA} --output ${WORKDIR}/${DATA_F}
-curl ${DATA} --output ${WORKDIR}/${WEATHER_DATA_F}
+wget -O "${WORKDIR}/${DATA_F}" "${DATA}"
+wget -O "${WORKDIR}/${WEATHER_DATA_F}" "${WEATHER_DATA}"
 
 tar -zxvf ${WORKDIR}/${DATA_F} -C ${WORKDIR}
 tar -zxvf ${WORKDIR}/${WEATHER_DATA_F} -C ${WORKDIR}
