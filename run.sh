@@ -1,2 +1,8 @@
 #!/usr/bin/env bash
-docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -v /Users/wvl/Workspaces/BigBoards/docker-training-data/data/docker:/var/lib/mysql training-src-data
+[[ `uname` == "Darwin" ]] && {
+THIS_DIR=`dirname "$(greadlink -f "$0")"`
+} || {
+THIS_DIR=`dirname "$(readlink -f "$0")"`
+}
+
+docker run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -v $THIS_DIR/data/docker:/var/lib/mysql training-src-data
