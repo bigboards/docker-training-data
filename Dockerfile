@@ -5,8 +5,8 @@ MAINTAINER bigboards
 
 USER root
 
-# uncomment next line, if you want data to be persisted
-#VOLUME ["/var/lib/mysql"]
+# we use a volume for performance reasons
+VOLUME ["/var/lib/mysql"]
 
 ENV DATA_F data.tar.gz
 ENV DATA https://s3.amazonaws.com/data.bigboards.io/bb-docker-training-src-data/${DATA_F}
