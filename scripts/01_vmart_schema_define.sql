@@ -475,10 +475,12 @@ create table weather.countries
 
 create table weather.facts
 ( station_id                 integer         not null,
+  element                    char(4)         not null,
+  units                      char(2)         not null,
   year                       integer         not null,
   month                      integer         not null,
-  element                    char(4)         not null,
-  day1                       integer,
+  days                       integer         not null,
+  day_1                      integer,
   day_2                      integer,
   day_3                      integer,
   day_4                      integer,
@@ -514,10 +516,12 @@ create table weather.facts
 
 create table weather.facts_2006
 ( station_id                 integer         not null,
+  element                    char(4)         not null,
+  units                      char(2)         not null,
   year                       integer         not null,
   month                      integer         not null,
-  element                    char(4)         not null,
-  day1                       integer,
+  days                       integer         not null,
+  day_1                      integer,
   day_2                      integer,
   day_3                      integer,
   day_4                      integer,
