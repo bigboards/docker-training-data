@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-[[ `uname` == 'Darwin' ]] && {
+[[ `uname` == "Darwin" ]] && {
 THIS_DIR=`dirname "$(greadlink -f "$0")"`
 } || {
 THIS_DIR=`dirname "$(readlink -f "$0")"`
@@ -12,35 +12,43 @@ SRC="ftp://${SRCPATH}"
 echo "FROM=${SRC}"
 echo "  TO=${TARGET}"
 
-echo -n 'downloading '
+echo -n "downloading "
 wget -x -P $TARGET "${SRC}/README"
 wget -x -P $TARGET "${SRC}/invent.txt"
 wget -x -P $TARGET "${SRC}/ushcn_01.tar"
-wget -x -P $TARGET "${SRC}/ushcn_98.tar"
 
+echo -n "unarchiving "
 mkdir -p "${TARGET}/${SRCPATH}/ushcn_01"
 tar -xvf "${TARGET}/${SRCPATH}/ushcn_01.tar" -C "${TARGET}/${SRCPATH}/ushcn_01"
 
 FILES="${TARGET}/${SRCPATH}/ushcn_01/*.Z"
-echo -n 'extracting '
+echo -n "extracting "
 for f in $FILES
 do
-  echo -n '. '
+  echo -n ". "
   gunzip $f
 done
-echo ' '
+echo " "
 
 FILES="${TARGET}/${SRCPATH}/ushcn_01/*"
-echo -n 'converting '
+echo -n "converting "
 for f in $FILES
 do
-  echo -n '. '
-  gawk -f to_csv.awk $f > $f.csv
+  echo -n ". "
+  gawk -f state_to_csv.awk $f > $f.csv
   rm $f
 done
-echo ' '
 
-echo -n 'archiving '
-tar -cvzf "${TARGET}/${SRCPATH}/weather.tar.gz" -C "${TARGET}/${SRCPATH}" "ushcn_01/" "invent.txt" "README"
+echo -n ". "
+echo "STATE,STCODE" > "${TARGET}/${SRCPATH}/ushcn_01/states.csv"
+gawk -f invent_to_states_csv.awk "${TARGET}/${SRCPATH}/invent.txt" | sort -u >> "${TARGET}/${SRCPATH}/ushcn_01/states.csv"
+echo -n ". "
+gawk -f invent_to_stations_csv.awk "${TARGET}/${SRCPATH}/invent.txt" > "${TARGET}/${SRCPATH}/ushcn_01/stations.csv"
+echo -n ". "
+cp "${TARGET}/${SRCPATH}/README" "${TARGET}/${SRCPATH}/ushcn_01/"
+echo " "
 
-echo -n 'Done!'
+echo -n "archiving "
+tar -cvzf "${TARGET}/${SRCPATH}/weather.tar.gz" -C "${TARGET}/${SRCPATH}" "ushcn_01/"
+
+echo -n "Done!"
