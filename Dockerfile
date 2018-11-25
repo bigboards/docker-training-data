@@ -10,6 +10,7 @@ RUN set -x \
 
 # we use a volume for performance reasons
 VOLUME ["/var/lib/mysql"]
+VOLUME ["/opt/training-src-data"]
 
 # Hook in to the docker/mysql initialization routine
 # cfr https://github.com/docker-library/mysql/blob/master/5.6/docker-entrypoint.sh
