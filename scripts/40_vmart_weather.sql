@@ -65,5 +65,9 @@ load data local infile '/opt/training-src-data/ushcn_01/state48.csv' into table 
 
 insert into weather.facts_2006
 select * from weather.facts
-where year = '2006'
+where year=2001
+;
+
+update weather.facts_2006
+set year = '2006'
 ;
